@@ -1,130 +1,7 @@
-// // src/App.jsx
-// import { useState, useRef } from "react";
-// import { Mic, Send } from "lucide-react";
-// import "./App.css"; // 👈 apna CSS file import karo
-
-// function App() {
-//   const [messages, setMessages] = useState([
-//     {
-//       role: "assistant",
-//       content: "Hello! I am your Pregnancy Guide. How can I help you today?",
-//     },
-//   ]);
-//   const [input, setInput] = useState("");
-//   const [listening, setListening] = useState(false);
-
-//   const recognitionRef = useRef(null);
-
-//   // 🎤 Start / Stop Voice Recognition
-//   const handleVoice = () => {
-//     if (!("webkitSpeechRecognition" in window)) {
-//       alert("Voice recognition not supported in this browser");
-//       return;
-//     }
-
-//     if (!recognitionRef.current) {
-//       recognitionRef.current = new window.webkitSpeechRecognition();
-//       recognitionRef.current.lang = "en-US"; // ⚡ Urdu ke liye "ur-PK" bhi use kar sakte ho
-//       recognitionRef.current.interimResults = false;
-//       recognitionRef.current.onresult = (event) => {
-//         const transcript = event.results[0][0].transcript;
-//         setInput(transcript);
-//       };
-//     }
-
-//     if (!listening) {
-//       recognitionRef.current.start();
-//       setListening(true);
-//     } else {
-//       recognitionRef.current.stop();
-//       setListening(false);
-//     }
-//   };
-
-//   // 📤 Send Message
-//   const sendMessage = async () => {
-//     if (!input.trim()) return;
-
-//     const newMsg = { role: "user", content: input };
-//     setMessages([...messages, newMsg]);
-//     setInput("");
-
-//     // 🟢 Call your backend API
-//     try {
-//       const res = await fetch("http://localhost:3000/chat", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ message: input }),
-//       });
-//       const data = await res.json();
-
-//       setMessages((prev) => [
-//         ...prev,
-//         { role: "assistant", content: data.reply },
-//       ]);
-
-//       // 🔊 Voice Output (optional)
-//       const utterance = new SpeechSynthesisUtterance(data.reply);
-//       utterance.lang = "en-US"; // Urdu ke liye "ur-PK"
-//       speechSynthesis.speak(utterance);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   return (
-//     <div className="app-container">
-//       {/* Header */}
-//       <header className="header">🤰 Pregnant Woman AI Chatbot</header>
-
-//       {/* Chat Area */}
-//       <main className="chat-area">
-//         {messages.map((msg, idx) => (
-//           <div
-//             key={idx}
-//             className={`message ${msg.role === "user" ? "user" : "assistant"}`}
-//           >
-//             {msg.content}
-//           </div>
-//         ))}
-//       </main>
-
-//       {/* Input Area */}
-//       <footer className="input-area">
-//         <input
-//           className="chat-input"
-//           placeholder="Type your question..."
-//           value={input}
-//           onChange={(e) => setInput(e.target.value)}
-//         />
-//         <button
-//           onClick={handleVoice}
-//           className={`mic-btn ${listening ? "listening" : ""}`}
-//         >
-//           <Mic size={20} />
-//         </button>
-//         <button onClick={sendMessage} className="send-btn">
-//           <Send size={18} className="send-icon" /> Send
-//         </button>
-//       </footer>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import React, { useEffect, useRef, useState } from "react";
-import "./styles.css";
+import Swal from "sweetalert2";
 
-/**
- * Pregnant Woman AI Chatbot - Frontend (React)
- * - Chat UI with left sidebar (like ChatGPT)
- * - Voice input via Web Speech API (speech-to-text)
- * - TTS via SpeechSynthesis
- * - Responsive: sidebar collapses on small screens
- *
- * Connect backend: POST /chat { message } -> { reply }
- */
+import "./styles.css";
 
 export default function App() {
   const [messages, setMessages] = useState([
@@ -132,7 +9,7 @@ export default function App() {
       id: Date.now(),
       role: "assistant",
       content:
-        "Assalamualaikum! Main aapka Pregnancy Guide hoon. Aap apna sawal type ya bol ke poch saktay hain.",
+        "👋Assalamualaikum! Hello Student, I am your Teacher. You can type or ask your question by speaking..",
       time: new Date().toLocaleTimeString(),
     },
   ]);
@@ -214,7 +91,9 @@ export default function App() {
       const data = await res.json();
       // Expect backend to return: { reply: "..." } or { message: "..." }
       const replyText =
-        data.reply ?? data.message ?? "Kuch galat hua, dobara koshish karein.";
+        data.reply ??
+        data.message ??
+        "Something went wrong, please try again..";
 
       const botMsg = {
         id: Date.now() + Math.random(),
@@ -231,7 +110,7 @@ export default function App() {
         id: Date.now() + Math.random(),
         role: "assistant",
         content:
-          "Server se jawab nahi mila. Internet check karen ya dobara try karein.",
+          "No response from the server. Please check your internet connection or try again..",
         time: new Date().toLocaleTimeString(),
       };
       setMessages((m) => [...m, errMsg]);
@@ -268,7 +147,7 @@ export default function App() {
         id: Date.now(),
         role: "assistant",
         content:
-          "Assalamualaikum! Main aapka Pregnancy Guide hoon. Aap apna sawal type ya bol ke poch saktay hain.",
+          "👋Assalamualaikum! Hello Student, I am your Teacher. You can type or ask your question by speaking..",
         time: new Date().toLocaleTimeString(),
       },
     ]);
@@ -280,9 +159,9 @@ export default function App() {
         {/* Sidebar */}
         <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
           <div className="brand">
-            <div className="logo">🤰</div>
+            <div className="logo">👨‍🎓</div>
             <div>
-              <div className="brand-title">Pregnant Woman</div>
+              <div className="brand-title">AI Teacher</div>
               <div className="brand-sub">AI Chatbot</div>
             </div>
           </div>
@@ -294,9 +173,20 @@ export default function App() {
             <button
               className="menu-item"
               onClick={() =>
-                alert(
-                  "This chatbot provides general guidance. For emergencies or personalized medical advice, please consult your clinician."
-                )
+                Swal.fire({
+                  title: "⚠️ Medical Disclaimer",
+                  html: `
+      <p>
+        This AI Teacher Chatbot is designed for educational assistance and general guidance.
+        It should <b>not</b> be used as a substitute for a qualified teacher or medical expert.
+      </p>
+      <p>
+        For accurate information or diagnosis, please consult a professional.
+      </p>
+    `,
+                  icon: "warning",
+                  confirmButtonText: "I Understand",
+                })
               }
             >
               ⚠️ Disclaimer
@@ -304,9 +194,24 @@ export default function App() {
             <button
               className="menu-item"
               onClick={() =>
-                alert(
-                  "Pilot / About: This project aims to provide evidence-based pregnancy guidance using WHO/NHS resources."
-                )
+                Swal.fire({
+                  title: "ℹ️ About AI Teacher Chatbot",
+                  html: `
+        <p>
+        <b>AI Teacher Chatbot</b> is an interactive educational assistant that helps students
+        learn using natural conversation — either by typing or speaking.
+      </p>
+      <p>
+        Developed using <b>React.js</b>, <b>Node.js</b>, and <b>Speech APIs</b>,
+        this system can understand Urdu, English, and Sindhi.
+      </p>
+      <p style="font-size:13px;color:gray;">
+        Created by <b>Farman Hyder</b> <b>Shahzad Ashraf</b> <b>Shaiza Ghulam Hussain</b> — Full Stack / MERN Developer.
+      </p>
+    `,
+                  icon: "info",
+                  confirmButtonText: "Close",
+                })
               }
             >
               ℹ️ About
@@ -353,7 +258,7 @@ export default function App() {
             >
               ☰
             </button>
-            <div className="top-title">Pregnant Woman AI Chatbot</div>
+            <div className="top-title">Parsanal Teacher Chatbot</div>
           </header>
 
           <section className="chat-panel">
