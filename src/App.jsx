@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
-
 import "./styles.css";
 
 export default function App() {
@@ -20,6 +19,9 @@ export default function App() {
   const [lang, setLang] = useState("ur-PK"); // default Urdu for TTS/ASR if available
   const messagesRef = useRef(null);
   const recognitionRef = useRef(null);
+
+  const userId =
+    Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
 
   // Scroll to bottom on messages change
   useEffect(() => {
@@ -85,7 +87,10 @@ export default function App() {
       const res = await fetch("http://localhost:3000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({
+          threadid: userId,
+          message: text,
+        }),
       });
 
       const data = await res.json();
