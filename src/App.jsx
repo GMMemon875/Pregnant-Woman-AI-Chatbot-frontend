@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import "./styles.css";
+import dotenv from "dotenv";
+dotenv.config();
 
 export default function App() {
   const [messages, setMessages] = useState([
@@ -84,7 +86,7 @@ export default function App() {
 
     try {
       // Call your backend (adjust URL/port if needed)
-      const res = await fetch("ai-imtiaz-backend.vercel.app/chat", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
