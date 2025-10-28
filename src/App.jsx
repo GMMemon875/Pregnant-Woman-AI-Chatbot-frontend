@@ -84,7 +84,7 @@ export default function App() {
 
     try {
       // Call your backend (adjust URL/port if needed)
-      const res = await fetch("http://localhost:3000/chat", {
+      const res = await fetch("ai-imtiaz-backend.vercel.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
