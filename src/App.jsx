@@ -10,7 +10,7 @@ export default function App() {
       id: Date.now(),
       role: "assistant",
       content:
-        "👋Assalamualaikum! Hello Student, I am your Teacher. You can type or ask your question by speaking..",
+        "👋Assalamualaikum! Hello Gays, I am your Assistant. You can type or ask your question by speaking..",
       time: new Date().toLocaleTimeString(),
     },
   ]);
@@ -22,7 +22,7 @@ export default function App() {
   const messagesRef = useRef(null);
   const recognitionRef = useRef(null);
 
-  // const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const userId =
     Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
@@ -88,7 +88,7 @@ export default function App() {
 
     try {
       // Call your backend (adjust URL/port if needed)
-      const res = await fetch(`http://localhost:3000/chat`, {
+      const res = await fetch(`${API_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
